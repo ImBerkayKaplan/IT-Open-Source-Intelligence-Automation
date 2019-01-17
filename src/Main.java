@@ -40,6 +40,7 @@ public class Main {
 		JTextArea screen = new JTextArea();
 		JLabel compNameL = new JLabel("Enter company name: "),compWebsiteL = new JLabel("Enter company website: ");
 		JButton submit = new JButton("Submit");
+		screen.setEditable(true);
 		JScrollPane fullScreen = new JScrollPane(screen);
 		
 		// Adjust properties of components
@@ -66,10 +67,10 @@ public class Main {
             	// Robtex step
             	screen.setText(screen.getText() + "Started searching on www.robtex.com.\n");
             	String robtext[] = OSU.getRobtex(website);
-            	
             	for(int i = 0; i < robtext.length; i++) {
             		screen.setText(screen.getText() + robtext[i] + "\n");
             	}
+            	//screen.setText(screen.getText() + "\n");
             	
             	// Clear the inputs
             	compNameT.setText("");

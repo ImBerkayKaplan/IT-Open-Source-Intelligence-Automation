@@ -11,32 +11,6 @@ public class OSUIntelligenceTools {
 	public static final String NO_INFORMATION_MESSAGE = "No information found. Please proceed";
 	public static final int NUMBER_OF_ROBTEXELEMENTS = 8;
 	
-	String getHoovers(String name) {
-		
-		// Initalize the result
-		String result = "Method not completed yet";
-		
-		try {
-			
-			// Get the page
-			String website = "http://www.hoovers.com/company-information/company-search.html?term=" + name + "&aka_re=1";
-			Document doc = Jsoup.connect(website).get();
-					
-			// Check if any information exists by seeing if the specific class exists
-			if(!doc.getElementsByClass("company_name").isEmpty()) {
-				result = "Information detected. Go to " + website;
-			}else {
-				result =  NO_INFORMATION_MESSAGE;
-			}
-					
-		}catch(Exception e) {
-			result = ERROR_MESSAGE;
-		}
-		
-		// Return the Hoovers information
-		return result;
-	}
-	
 	/* This method checks if any information about the company exist on Edgar and returns the appropriate message.
 	 * 
 	 * @params name
@@ -162,7 +136,7 @@ public class OSUIntelligenceTools {
 		
 	}
 	
-	/* A private internal method that gets all concatenated leaves of the Jsoup tree with a little of customization for the robtex website
+	/* A private internal method that gets all concatenated leaves of the Jsoup tree with a little customization for the robtex website
 	 * 
 	 * @params root
 	 * 		The tree in Jsoup
@@ -176,9 +150,15 @@ public class OSUIntelligenceTools {
 		// Go through all child nodes
 		for(int i = 0; i < root.childNodeSize(); i++) {
 			
-			// If the root still has children, go to the leftmost node, otherwise, get get the data
+			// If the root still has children, go to the leftmost node, otherwise, get the data
 			if(root.childNode(i).childNodeSize()>0) {
-				result = result + getJsoupTreeData(root.childNode(i))+" ";
+				
+				// Concat the string to the data inside the child of root and a custom solution to prevent unwanted spaces appearing after the bold tag
+				if(root.childNode(i).nodeName().equals("b")) {
+					result = result + getJsoupTreeData(root.childNode(i));
+				}else {
+					result = result + getJsoupTreeData(root.childNode(i)) + " ";
+				}
 			}else {
 				
 				// A custom solution to prevent unwanted <ul>s appearing at the end of the string
