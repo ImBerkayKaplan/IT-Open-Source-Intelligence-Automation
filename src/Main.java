@@ -32,7 +32,7 @@ public class Main {
 		
 		// Initialize the necessary tools
 		OSUIntelligenceTools OSU = new OSUIntelligenceTools();
-		JFrame frame = GUI("Open Source Intelligence", new Dimension(500,400), false);
+		JFrame frame = GUI("Open Source Intelligence", new Dimension(500,600), false);
 		
 		// Define components
 		JPanel panel = new JPanel();
@@ -45,7 +45,7 @@ public class Main {
 		
 		// Adjust properties of components
 		panel.setBackground(Color.GRAY);
-		fullScreen.setPreferredSize(new Dimension(450,250));
+		fullScreen.setPreferredSize(new Dimension(450,450));
 		compNameT.setPreferredSize(new Dimension(300,25));
 		compWebsiteT.setPreferredSize(new Dimension(300,25));
 		submit.setSize(new Dimension(80,20));
@@ -70,6 +70,7 @@ public class Main {
             	for(int i = 0; i < robtext.length; i++) {
             		screen.setText(screen.getText() + robtext[i] + "\n");
             	}
+            	
             	//screen.setText(screen.getText() + "\n");
             	
             	// Clear the inputs

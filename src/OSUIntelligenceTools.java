@@ -136,6 +136,36 @@ public class OSUIntelligenceTools {
 		
 	}
 	
+	/* Work in progress
+	String getUltraTools(String websiteName) {
+		
+		// Initalize the result
+		String result = "Method not completed yet";
+		String website = "https://www.ultratools.com/tools/zoneFileDump";
+		
+		try {
+			
+			Connection conn = Jsoup.connect(website);
+			Connection.Response res = conn.method(Method.GET).execute();
+			Document docGet = res.parse();
+			
+			
+			String as_fid = docGet.getElementsByAttributeValue("name", "as_fid").attr("value");
+			String as_sfid = docGet.getElementsByAttributeValue("name", "as_sfid").attr("value");
+			
+			Connection.Response resPos = conn.data("zoneName", websiteName).data("as_sfid", as_sfid).data("as_fid", as_fid).cookies(res.cookies()).method(Method.POST).execute();
+			
+			
+			System.out.println(resPos.parse().getElementsByClass("error").toString());
+		} catch (IOException e) {
+			
+		}
+
+		
+		return result;
+	}
+	*/
+	
 	/* A private internal method that gets all concatenated leaves of the Jsoup tree with a little customization for the robtex website
 	 * 
 	 * @params root
