@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,7 +30,7 @@ public class Main {
 		return frame;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		
 		// Initialize the necessary tools
 		OSUIntelligenceTools OSU = new OSUIntelligenceTools();
@@ -55,6 +57,15 @@ public class Main {
             	// Get the input variables and clear the screen
             	String name = compNameT.getText(), website = compWebsiteT.getText();
             	screen.setText("");
+            	
+            	// The SSLlabs step
+            	try {
+					OSU.openSSLLABSbrowser(website);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
             	
             	// Edgar step
             	screen.setText(screen.getText() + "Started searching on Edgar www.sec.gov\n");

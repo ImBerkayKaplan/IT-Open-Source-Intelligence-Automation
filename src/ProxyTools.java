@@ -1,12 +1,10 @@
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
+import org.jsoup.Connection.Response;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -16,12 +14,10 @@ import org.jsoup.select.Elements;
  */
 public class ProxyTools {
 	
-	private Proxy proxy; // The proxy of this class that will be used to connect to a particular web page
-	private HttpURLConnection connection; // The active connection
 	private ArrayList<String> proxyIPs; // The list of the proxy IPs
 	private ArrayList<Integer> proxyPorts; // The list of the proxy port numbers
 	private String RESOURCE_URL; // The web page FQDN where the proxies will be gathered
-	//private int index; // The index of the proxies to switch to other proxies when needed
+	private int index; // The index of the proxies to switch to other proxies when needed
 	
 	/*
 	 * Initialize the list for the proxies' index, the resource_url for all proxy information, 
@@ -29,33 +25,49 @@ public class ProxyTools {
 	 */
 	ProxyTools() throws IOException{
 		
-		
 		// Initialize the list of proxies
 		this.RESOURCE_URL = "https://www.us-proxy.org";
 		this.proxyIPs = new ArrayList<String>();
 		this.proxyPorts = new ArrayList<Integer>();
-		//this.index = 0;
+		this.index = 0;
 		initializeProxies();
-		
-		// Initalize the connection with the proxy
-		//this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(this.proxyIPs.get(this.index), this.proxyPorts.get(this.index)));
-		//this.index++;
 	}
 	
-	public void connect(String website) {
+	/*
+	 * Attempt to access the resource using all the proxies in the list
+	 * 
+	 * @params resource
+	 * 		The resource that will be accessed
+	 * @params website
+	 * 		The website that will be queried in the resource
+	 * @returns result
+	 * 		If the proxy could access the resource, it will return the response from the query, otherwise null
+	 */
+	Response proxyStream(String resource ,String website) throws IOException{
 		
-		// Define the URL, and connect to the web page using the proxy
-		try {
-			URL url = new URL(website);
-			this.connection = (HttpURLConnection)url.openConnection(proxy);
-			this.connection.connect();
-		} catch (MalformedURLException e) {
-			System.err.println("Wrong URL. Program exiting");
-			System.exit(1);
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		// Initialize the status code and the response
+		int status = 0;
+		Response result = null;
+		do{
+			
+			// Connect to the specific website using the proxy and enforce a timeout to avoid unactive proxies
+			try {
+				result = Jsoup.connect(resource + website).proxy(this.proxyIPs.get(this.index), this.proxyPorts.get(this.index)).timeout(5000).execute();
+				status = result.statusCode();
+			}catch(SocketTimeoutException e) {
+				status = 0;
+			}catch (HttpStatusException e) {
+				status = 0;
+			}
+			
+			// Increment the index to go to the next proxy
+			this.index++;
+            
+			// Keep iterating while the status code is not success or the index did not exceed the size
+		}while(status != 200 && this.index < this.proxyIPs.size());
+		
+		// Return the response, or null if the resource acess was unsuccessful
+		return result;
 	}
 	
 	private void initializeProxies() throws IOException{
@@ -75,15 +87,5 @@ public class ProxyTools {
 			this.proxyIPs.add(rows.get(i).child(0).text());
 			this.proxyPorts.add(Integer.parseInt(rows.get(i).child(1).text()));
 		}
-		
-		System.out.println(rows.toString());
-		
 	}
-	
-	public void intializeCon(String website){
-		
-		
-
-	}
-	
 }

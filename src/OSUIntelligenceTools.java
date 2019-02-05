@@ -1,9 +1,17 @@
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
+
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class OSUIntelligenceTools {
 	
@@ -136,35 +144,31 @@ public class OSUIntelligenceTools {
 		
 	}
 	
-	/* Work in progress
-	String getUltraTools(String websiteName) {
+	String[] getWhois(String website) throws IOException{
+		String[] result = null;
+		ProxyTools proxy = new ProxyTools();
+		Response whoisResponse = proxy.proxyStream("http://whois.domaintools.com/" , website);
 		
-		// Initalize the result
-		String result = "Method not completed yet";
-		String website = "https://www.ultratools.com/tools/zoneFileDump";
-		
-		try {
-			
-			Connection conn = Jsoup.connect(website);
-			Connection.Response res = conn.method(Method.GET).execute();
-			Document docGet = res.parse();
-			
-			
-			String as_fid = docGet.getElementsByAttributeValue("name", "as_fid").attr("value");
-			String as_sfid = docGet.getElementsByAttributeValue("name", "as_sfid").attr("value");
-			
-			Connection.Response resPos = conn.data("zoneName", websiteName).data("as_sfid", as_sfid).data("as_fid", as_fid).cookies(res.cookies()).method(Method.POST).execute();
-			
-			
-			System.out.println(resPos.parse().getElementsByClass("error").toString());
-		} catch (IOException e) {
-			
+		if(whoisResponse != null) {
+			Elements rows = whoisResponse.parse().getElementsByTag("tr");
+		}else {
+			JOptionPane.showMessageDialog(null, "Currently no proxy can connect to whois.domaintools.com. Please try again later", "Error with the proxies", JOptionPane.ERROR_MESSAGE);
 		}
-
-		
 		return result;
 	}
-	*/
+	
+	/* This method opens a new web browser to the www.ssllabs.com
+	 * 
+	 * @params websiteName
+	 * 		The website name in question
+	 */
+	void openSSLLABSbrowser(String website) throws IOException, URISyntaxException {
+		
+		// Check if the desktop is supported and open the browser
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+		    Desktop.getDesktop().browse(new URI("https://www.ssllabs.com/ssltest/analyze.html?d=" + website));
+		}
+	}
 	
 	/* A private internal method that gets all concatenated leaves of the Jsoup tree with a little customization for the robtex website
 	 * 
