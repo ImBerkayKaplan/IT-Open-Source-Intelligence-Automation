@@ -52,7 +52,8 @@ public class Main {
 		compWebsiteT.setPreferredSize(new Dimension(300,25));
 		submit.setSize(new Dimension(80,20));
 		submit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+
+			public void actionPerformed(ActionEvent e) {
             	
             	// Get the input variables and clear the screen
             	String name = compNameT.getText(), website = compWebsiteT.getText();
@@ -68,7 +69,7 @@ public class Main {
 				}
             	
             	// Edgar step
-            	screen.setText(screen.getText() + "Started searching on Edgar www.sec.gov\n");
+            	screen.setText(screen.getText() + "Started searching on Edgar www.sec.gov.\n");
             	screen.setText(screen.getText() + OSU.getEdgar(name) + "\n\n");
             	
             	// Privacy Rights step
@@ -82,7 +83,18 @@ public class Main {
             		screen.setText(screen.getText() + robtext[i] + "\n");
             	}
             	
-            	//screen.setText(screen.getText() + "\n");
+            	// Whois step
+            	screen.setText(screen.getText() + "\n");
+            	screen.setText(screen.getText() + "Started searching on www.whois.domaintools.com.\n");
+            	try {
+					String whois[] = OSU.getWhois(website);
+	            	for(int i = 0; i < whois.length; i++) {
+	            		screen.setText(screen.getText() + whois[i] + "\n");
+	            	}
+	            	
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
             	
             	// Clear the inputs
             	compNameT.setText("");

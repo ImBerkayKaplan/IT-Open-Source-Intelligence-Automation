@@ -63,10 +63,10 @@ public class ProxyTools {
 			// Increment the index to go to the next proxy
 			this.index++;
             
-			// Keep iterating while the status code is not success or the index did not exceed the size
-		}while(status != 200 && this.index < this.proxyIPs.size());
+			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
+		}while(status != 200 && this.index < this.proxyIPs.size() && !result.parse().select("#ajax-captcha").isEmpty());
 		
-		// Return the response, or null if the resource acess was unsuccessful
+		// Return the response, or null if the resource access was unsuccessful
 		return result;
 	}
 	

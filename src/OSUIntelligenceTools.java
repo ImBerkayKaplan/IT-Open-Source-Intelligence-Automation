@@ -1,7 +1,5 @@
 import java.util.Iterator;
 
-import javax.swing.JOptionPane;
-
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,9 +13,12 @@ import java.net.URISyntaxException;
 
 public class OSUIntelligenceTools {
 	
-	public static final String ERROR_MESSAGE = "Step failed due to a technical error. Contact the programmer please.";
-	public static final String NO_INFORMATION_MESSAGE = "No information found. Please proceed";
-	public static final int NUMBER_OF_ROBTEXELEMENTS = 8;
+	
+	// Predetermined constants for the structure of OSUIntelligenceTools
+	private static final String ERROR_MESSAGE = "Step failed due to a technical error. Contact the programmer please.";
+	private static final String NO_INFORMATION_MESSAGE = "No information found. Please proceed";
+	private static final int NUMBER_OF_ROBTEXELEMENTS = 8;
+	private static final int NUMBER_OF_WHOISELEMENTS = 3;
 	
 	/* This method checks if any information about the company exist on Edgar and returns the appropriate message.
 	 * 
@@ -89,12 +90,12 @@ public class OSUIntelligenceTools {
 		return result;
 	}
 	
-	/* This method checks the information on http://whois.domaintools.com/
+	/* This method checks the information on www.robtex.com
 	 * 
 	 * @params websiteName
 	 * 		The website name in question
 	 * 
-	 * @returns The information found on whois as String array
+	 * @returns The information found on robtex as String array
 	 */
 	String[] getRobtex(String websiteName) {
 		
@@ -134,7 +135,7 @@ public class OSUIntelligenceTools {
 		}catch(Exception e) {
 			
 			// Set all elements the error message
-			for(int i = 0; i < result.length; i++) {
+			for(int i = 0; i < NUMBER_OF_ROBTEXELEMENTS; i++) {
 				result[i] = ERROR_MESSAGE;
 			}
 		}
@@ -144,16 +145,51 @@ public class OSUIntelligenceTools {
 		
 	}
 	
+	/* This method checks the information on http://whois.domaintools.com/
+	 * 
+	 * @params websiteName
+	 * 		The website name in question
+	 * 
+	 * @returns The information found on whois as String array
+	 */
 	String[] getWhois(String website) throws IOException{
-		String[] result = null;
+		
+		// Define the result array, the proxy tools to circumvent whois.com's limit usage, and get the website as a response
+		String[] result = new String[NUMBER_OF_WHOISELEMENTS];
 		ProxyTools proxy = new ProxyTools();
 		Response whoisResponse = proxy.proxyStream("http://whois.domaintools.com/" , website);
+		Elements rows = new Elements();
 		
+		// If the response is null, then all the proxies have reached their whois.com usage limit. You may wait for a while, or use other proxies
 		if(whoisResponse != null) {
-			Elements rows = whoisResponse.parse().getElementsByTag("tr");
+			rows = whoisResponse.parse().getElementsByClass("row-label");
+			
+			// Add the IP Location, Server Type, and ASN to the result by iterating through all rows to find those specific elements
+			int counter1 = 0;
+			for(int i = 0; i < rows.size(); i++) {
+				if(rows.get(i).text().equals("IP Location")) {
+					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
+					counter1++;
+				}
+				if(rows.get(i).text().equals("Server Type")) {
+					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
+					counter1++;
+				}
+				if(rows.get(i).text().equals("ASN")) {
+					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
+					counter1++;
+				}
+			}
+			
 		}else {
-			JOptionPane.showMessageDialog(null, "Currently no proxy can connect to whois.domaintools.com. Please try again later", "Error with the proxies", JOptionPane.ERROR_MESSAGE);
+			
+			// Set all elements the error message
+			for(int i = 0; i < NUMBER_OF_WHOISELEMENTS; i++) {
+				result[i] = ERROR_MESSAGE;
+			}
 		}
+		
+		// Return the whois.domaintools.com information about the company
 		return result;
 	}
 	
