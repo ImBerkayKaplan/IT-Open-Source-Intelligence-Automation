@@ -48,6 +48,7 @@ public class ProxyTools {
 		// Initialize the status code and the response
 		int status = 0;
 		Response result = null;
+		
 		do{
 			
 			// Connect to the specific website using the proxy and enforce a timeout to avoid unactive proxies
@@ -62,9 +63,9 @@ public class ProxyTools {
 			
 			// Increment the index to go to the next proxy
 			this.index++;
-            
+			
 			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
-		}while(status != 200 && this.index < this.proxyIPs.size() && !result.parse().select("#ajax-captcha").isEmpty());
+		}while(status != 200 && this.index < this.proxyIPs.size());
 		
 		// Return the response, or null if the resource access was unsuccessful
 		return result;

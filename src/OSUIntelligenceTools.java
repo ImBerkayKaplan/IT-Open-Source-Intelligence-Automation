@@ -1,9 +1,7 @@
-import java.util.Iterator;
-
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Node;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.awt.Desktop;
@@ -109,27 +107,14 @@ public class OSUIntelligenceTools {
 			Document doc = Jsoup.connect(website).get();
 			
 			// Get all the necessary rows in the page and convert to nodes
-			Elements elements = doc.getElementsByClass("table2col");
-			Iterator<Node> it = elements.first().child(1).childNodes().iterator();
-			int i = 0;
+			Elements elements = doc.select(".table2col td");
 			
-			// Go through all element
-			while(it.hasNext()) {
-				Node node = it.next();
+			// Go through all elements
+			for(int i = 0; i < elements.size(); i++) {
+				Element element = elements.get(i);
 				
-				// Make sure only the columns with data are taken into account
-				if(node.childNodeSize() > 1) {
-					
-					// Put the header to the result. It will be followed by the data. Get the child of the second element which contains the data
-					result[i] = node.childNode(0).childNode(0).toString() + ": ";
-					Node child = node.childNode(1);
-					
-					// Get all data of the tree
-					result[i] = result[i] + getJsoupTreeData(child);
-					
-					// Increment the counter to place the data correctly in result
-					i++;
-				}
+				// Put the header to the result. It will be followed by the data.
+				result[i] = element.parent().child(0).text() + ": " + element.text();
 			}
 
 		}catch(Exception e) {
@@ -167,18 +152,16 @@ public class OSUIntelligenceTools {
 			// Add the IP Location, Server Type, and ASN to the result by iterating through all rows to find those specific elements
 			int counter1 = 0;
 			for(int i = 0; i < rows.size(); i++) {
-				if(rows.get(i).text().equals("IP Location")) {
+				if(rows.get(i).text().equals("IP Location") || rows.get(i).text().equals("Server Type") || rows.get(i).text().equals("ASN")) {
 					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
 					counter1++;
 				}
-				if(rows.get(i).text().equals("Server Type")) {
-					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
-					counter1++;
-				}
-				if(rows.get(i).text().equals("ASN")) {
-					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
-					counter1++;
-				}
+			}
+			
+			// If one of the required information above could not be found, place an error message rather than a null
+			while(counter1 != 3) {
+				result[counter1] = "Information not found";
+				counter1++;
 			}
 			
 		}else {
@@ -205,41 +188,4 @@ public class OSUIntelligenceTools {
 		    Desktop.getDesktop().browse(new URI("https://www.ssllabs.com/ssltest/analyze.html?d=" + website));
 		}
 	}
-	
-	/* A private internal method that gets all concatenated leaves of the Jsoup tree with a little customization for the robtex website
-	 * 
-	 * @params root
-	 * 		The tree in Jsoup
-	 * 
-	 * @returns all concatenated leaves of root
-	 */
-	private String getJsoupTreeData(Node root) {
-	
-		String result = "";
-		
-		// Go through all child nodes
-		for(int i = 0; i < root.childNodeSize(); i++) {
-			
-			// If the root still has children, go to the leftmost node, otherwise, get the data
-			if(root.childNode(i).childNodeSize()>0) {
-				
-				// Concat the string to the data inside the child of root and a custom solution to prevent unwanted spaces appearing after the bold tag
-				if(root.childNode(i).nodeName().equals("b")) {
-					result = result + getJsoupTreeData(root.childNode(i));
-				}else {
-					result = result + getJsoupTreeData(root.childNode(i)) + " ";
-				}
-			}else {
-				
-				// A custom solution to prevent unwanted <ul>s appearing at the end of the string
-				if(!root.childNode(i).nodeName().equals("ul")) {
-					result = result + root.childNode(i).toString();
-				}
-			}
-		}
-		
-		// Return the leaf
-		return result;
-	}
-	
 }
