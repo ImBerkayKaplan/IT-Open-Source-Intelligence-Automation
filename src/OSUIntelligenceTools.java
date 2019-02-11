@@ -1,4 +1,3 @@
-import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -142,12 +141,12 @@ public class OSUIntelligenceTools {
 		// Define the result array, the proxy tools to circumvent whois.com's limit usage, and get the website as a response
 		String[] result = new String[NUMBER_OF_WHOISELEMENTS];
 		ProxyTools proxy = new ProxyTools();
-		Response whoisResponse = proxy.proxyStream("http://whois.domaintools.com/" , website);
+		Document whoisResponse = proxy.proxyStream("http://whois.domaintools.com/" , website);
 		Elements rows = new Elements();
 		
 		// If the response is null, then all the proxies have reached their whois.com usage limit. You may wait for a while, or use other proxies
 		if(whoisResponse != null) {
-			rows = whoisResponse.parse().getElementsByClass("row-label");
+			rows = whoisResponse.getElementsByClass("row-label");
 			
 			// Add the IP Location, Server Type, and ASN to the result by iterating through all rows to find those specific elements
 			int counter1 = 0;

@@ -43,29 +43,38 @@ public class ProxyTools {
 	 * @returns result
 	 * 		If the proxy could access the resource, it will return the response from the query, otherwise null
 	 */
-	Response proxyStream(String resource ,String website) throws IOException{
+	Document proxyStream(String resource ,String website) throws IOException{
 		
 		// Initialize the status code and the response
 		int status = 0;
-		Response result = null;
+		Document result = null;
+		Response res = null;
+		boolean captcha = true;
 		
 		do{
 			
-			// Connect to the specific website using the proxy and enforce a timeout to avoid unactive proxies
+			// Connect to the specific web page using the proxy and enforce a timeout to avoid inactive proxies
 			try {
-				result = Jsoup.connect(resource + website).proxy(this.proxyIPs.get(this.index), this.proxyPorts.get(this.index)).timeout(5000).execute();
-				status = result.statusCode();
+				res = Jsoup.connect(resource + website).proxy(this.proxyIPs.get(this.index), this.proxyPorts.get(this.index)).timeout(3000).execute();
+				status = res.statusCode();
 			}catch(SocketTimeoutException e) {
 				status = 0;
 			}catch (HttpStatusException e) {
 				status = 0;
 			}
 			
-			// Increment the index to go to the next proxy
+			// Increment the index to go to the next proxy and parse the response for captcha protection
 			this.index++;
+			if(res != null) {
+				result = res.parse();
+				res = null;
+				captcha=result.getElementsByClass("row-label").isEmpty();
+			}else {
+				captcha = status != 200 && this.index < this.proxyIPs.size();
+			}
 			
 			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
-		}while(status != 200 && this.index < this.proxyIPs.size());
+		}while((status != 200 && this.index < this.proxyIPs.size()) || captcha);
 		
 		// Return the response, or null if the resource access was unsuccessful
 		return result;

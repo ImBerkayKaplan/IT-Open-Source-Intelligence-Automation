@@ -59,15 +59,6 @@ public class Main {
             	String name = compNameT.getText(), website = compWebsiteT.getText();
             	screen.setText("");
             	
-            	// The SSLlabs step
-            	try {
-					OSU.openSSLLABSbrowser(website);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (URISyntaxException e1) {
-					e1.printStackTrace();
-				}
-            	
             	// Edgar step
             	screen.setText(screen.getText() + "Started searching on Edgar www.sec.gov.\n");
             	screen.setText(screen.getText() + OSU.getEdgar(name) + "\n\n");
@@ -93,6 +84,15 @@ public class Main {
 	            	}
 	            	
 				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+            	
+            	// The SSLlabs step
+            	try {
+					OSU.openSSLLABSbrowser(website);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
 					e1.printStackTrace();
 				}
             	
