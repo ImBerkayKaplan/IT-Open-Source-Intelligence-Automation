@@ -1,10 +1,8 @@
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
-import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -53,24 +51,21 @@ public class ProxyTools {
 		
 		do{
 			
-			// Connect to the specific web page using the proxy and enforce a timeout to avoid inactive proxies
+			// Connect to the specific web page using the proxy and enforce a timeout to avoid inactive proxies. Catch any kind of exception in the catch block
 			try {
 				res = Jsoup.connect(resource + website).proxy(this.proxyIPs.get(this.index), this.proxyPorts.get(this.index)).timeout(3000).execute();
 				status = res.statusCode();
-			}catch(SocketTimeoutException e) {
-				status = 0;
-			}catch (HttpStatusException e) {
+			}catch (Exception e) {
 				status = 0;
 			}
 			
 			// Increment the index to go to the next proxy and parse the response for captcha protection
 			this.index++;
+			captcha = true;
 			if(res != null) {
 				result = res.parse();
 				res = null;
 				captcha=result.getElementsByClass("row-label").isEmpty();
-			}else {
-				captcha = status != 200 && this.index < this.proxyIPs.size();
 			}
 			
 			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
