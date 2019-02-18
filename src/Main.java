@@ -2,12 +2,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -53,52 +56,73 @@ public class Main {
 		submit.setSize(new Dimension(80,20));
 		submit.addActionListener(new ActionListener() {
 
+			// Add an actionListener to the submit button
 			public void actionPerformed(ActionEvent e) {
             	
             	// Get the input variables and clear the screen
             	String name = compNameT.getText(), website = compWebsiteT.getText();
-            	screen.setText("");
             	
-            	// Edgar step
-            	screen.setText(screen.getText() + "Started searching on Edgar www.sec.gov.\n");
-            	screen.setText(screen.getText() + OSU.getEdgar(name) + "\n\n");
-            	
-            	// Privacy Rights step
-            	screen.setText(screen.getText() + "Started searching on privacyrights.org.\n");
-            	screen.setText(screen.getText() + OSU.getPrivacyRights(name) + "\n\n");
-            	
-            	// Robtex step
-            	screen.setText(screen.getText() + "Started searching on www.robtex.com.\n");
-            	String robtext[] = OSU.getRobtex(website);
-            	for(int i = 0; i < robtext.length; i++) {
-            		screen.setText(screen.getText() + robtext[i] + "\n");
-            	}
-            	
-            	// Whois step
-            	screen.setText(screen.getText() + "\n");
-            	screen.setText(screen.getText() + "Started searching on www.whois.domaintools.com.\n");
-            	try {
-					String whois[] = OSU.getWhois(website);
-	            	for(int i = 0; i < whois.length; i++) {
-	            		screen.setText(screen.getText() + whois[i] + "\n");
+				// Create the file for the program to write the results and this action needs to be in a try block due to the IOException
+				try {
+					BufferedWriter file = new BufferedWriter(new FileWriter("Open Source Intelligence Gathering on " + name + ".docx"));
+					StringBuilder screenText = new StringBuilder();
+					
+					// Edgar step
+					screenText.append("Started searching on Edgar www.sec.gov.\n");
+	            	String edgar = OSU.getEdgar(name);
+	            	screenText.append(edgar + "\n\n");
+	            	file.write(edgar + "\n\n");
+	            	
+	            	// Privacy Rights step
+	            	screenText.append("Started searching on Edgar privacyrights.org.\n");
+	            	String privacyRights = OSU.getPrivacyRights(name);
+	            	screen.setText(privacyRights + "\n\n");
+	            	file.write(privacyRights + "\n\n");
+	            	
+	            	// Robtex step
+	            	screenText.append("Started searching on Edgar www.robtex.com.\n");
+	            	String robtext[] = OSU.getRobtex(website);
+	            	for(int i = 0; i < robtext.length; i++) {
+	            		screenText.append(robtext[i] + "\n");
+	            		file.write(robtext[i] + "\n");
 	            	}
 	            	
-				} catch (IOException e1) {
-					e1.printStackTrace();
+	            	// Whois step
+	            	screenText.append("\n");
+	            	file.write("\n");
+	            	screenText.append("Started searching on www.whois.domaintools.com.\n");
+	            	try {
+						String whois[] = OSU.getWhois(website);
+		            	for(int i = 0; i < whois.length; i++) {
+		            		screenText.append(whois[i] + "\n");
+		            		file.write(whois[i] + "\n");
+		            	}
+		            	
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+	            	
+	            	// Set the screen
+	            	screen.setText(screenText.toString());
+	            	
+	            	// The SSLlabs step
+	            	try {
+						OSU.openSSLLABSbrowser(website);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						e1.printStackTrace();
+					}
+	            	
+	            	// Clear the inputs and close the BufferedWriter
+	            	compNameT.setText("");
+	            	compWebsiteT.setText("");
+	            	file.close();
+	            	
+				} catch (IOException e2) {
+					JOptionPane.showMessageDialog(new JFrame("Error"), "A crucial error has occured. Program exiting");
+					System.exit(1);
 				}
-            	
-            	// The SSLlabs step
-            	try {
-					OSU.openSSLLABSbrowser(website);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (URISyntaxException e1) {
-					e1.printStackTrace();
-				}
-            	
-            	// Clear the inputs
-            	compNameT.setText("");
-            	compWebsiteT.setText("");
             }
         });
 		
