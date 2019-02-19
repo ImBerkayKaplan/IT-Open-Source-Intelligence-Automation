@@ -13,7 +13,6 @@ public class OSUIntelligenceTools {
 	
 	// Predetermined constants for the structure of OSUIntelligenceTools
 	private static final String ERROR_MESSAGE = "Step failed due to a technical error. Contact the programmer please.";
-	private static final String NO_INFORMATION_MESSAGE = "No information found. Please proceed";
 	private static final int NUMBER_OF_ROBTEXELEMENTS = 8;
 	private static final int NUMBER_OF_WHOISELEMENTS = 3;
 	
@@ -34,13 +33,13 @@ public class OSUIntelligenceTools {
 					
 			// Get the page
 			String website = "https://www.sec.gov/cgi-bin/browse-edgar?company="+name+"&owner=exclude&action=getcompany";
-			Document doc = Jsoup.connect(website).get();
+			Document doc = Jsoup.connect(website).timeout(5000).get();
 					
 			// Check if any information exists by seeing if the specific class exists
 			if(!doc.getElementsByClass("noCompanyMatch").isEmpty()) {
-				result =  NO_INFORMATION_MESSAGE;
+				result =  "No information found on Edgar.";
 			}else {
-				result = "Information detected. Go to " + website;
+				result = "Information detected on Edgar. Go to " + website;
 			}
 					
 		}catch(Exception e) {
@@ -67,16 +66,16 @@ public class OSUIntelligenceTools {
 			
 			// Get the page
 			String website = "https://www.privacyrights.org/data-breaches?title=" + name;
-			Document doc = Jsoup.connect(website).get();
+			Document doc = Jsoup.connect(website).timeout(5000).get();
 			
 			// Get the specific element to make sure to breaches are detected
 			Elements breach = doc.select(".field-content");
 			
 			// Check if any breaches exist
 			if(breach.get(0).childNode(0).toString().equals("0")) {
-				result = NO_INFORMATION_MESSAGE;
+				result = "No information found on Privacy Rights.";
 			}else {
-				result = "Breach detected. Go to " + website;
+				result = "Breach detected on Privacy Rights. Go to " + website;
 			}
 			
 		}catch(Exception e) {
@@ -103,7 +102,7 @@ public class OSUIntelligenceTools {
 					
 			// Get the page
 			String website = "https://www.robtex.com/dns-lookup/" + websiteName;
-			Document doc = Jsoup.connect(website).get();
+			Document doc = Jsoup.connect(website).timeout(5000).get();
 			
 			// Get all the necessary rows in the page and convert to nodes
 			Elements elements = doc.select(".table2col td");
@@ -152,15 +151,8 @@ public class OSUIntelligenceTools {
 			int counter1 = 0;
 			for(int i = 0; i < rows.size(); i++) {
 				if(rows.get(i).text().equals("IP Location") || rows.get(i).text().equals("Server Type") || rows.get(i).text().equals("ASN")) {
-					result[counter1] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
-					counter1++;
+					result[counter1++] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
 				}
-			}
-			
-			// If one of the required information above could not be found, place an error message rather than a null
-			while(counter1 != 3) {
-				result[counter1] = "Information not found";
-				counter1++;
 			}
 			
 		}else {

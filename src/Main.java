@@ -68,19 +68,16 @@ public class Main {
 					StringBuilder screenText = new StringBuilder();
 					
 					// Edgar step
-					screenText.append("Started searching on Edgar www.sec.gov.\n");
 	            	String edgar = OSU.getEdgar(name);
 	            	screenText.append(edgar + "\n\n");
 	            	file.write(edgar + "\n\n");
 	            	
 	            	// Privacy Rights step
-	            	screenText.append("Started searching on Edgar privacyrights.org.\n");
 	            	String privacyRights = OSU.getPrivacyRights(name);
-	            	screen.setText(privacyRights + "\n\n");
+	            	screenText.append(privacyRights + "\n\n");
 	            	file.write(privacyRights + "\n\n");
 	            	
 	            	// Robtex step
-	            	screenText.append("Started searching on Edgar www.robtex.com.\n");
 	            	String robtext[] = OSU.getRobtex(website);
 	            	for(int i = 0; i < robtext.length; i++) {
 	            		screenText.append(robtext[i] + "\n");
@@ -90,7 +87,6 @@ public class Main {
 	            	// Whois step
 	            	screenText.append("\n");
 	            	file.write("\n");
-	            	screenText.append("Started searching on www.whois.domaintools.com.\n");
 	            	try {
 						String whois[] = OSU.getWhois(website);
 		            	for(int i = 0; i < whois.length; i++) {
