@@ -52,24 +52,28 @@ public class ProxyTools {
 		do{
 			
 			// Connect to the specific web page using the proxy and enforce a timeout to avoid inactive proxies. Catch any kind of exception in the catch block
+			captcha = true;
 			try {
 				res = Jsoup.connect(resource + website).proxy(this.proxyIPs.get(this.index), this.proxyPorts.get(this.index)).timeout(3000).execute();
 				status = res.statusCode();
+				
+				// Increment the index to go to the next proxy and parse the response for captcha protection
+				this.index++;
+				if(res != null) {
+					result = res.parse();
+					res = null;
+					captcha=result.getElementsByClass("row-label").isEmpty();
+				}
+				
+				
+				
 			}catch (Exception e) {
+				this.index++;
 				status = 0;
 			}
 			
-			// Increment the index to go to the next proxy and parse the response for captcha protection
-			this.index++;
-			captcha = true;
-			if(res != null) {
-				result = res.parse();
-				res = null;
-				captcha=result.getElementsByClass("row-label").isEmpty();
-			}
-			
 			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
-		}while((status != 200 && this.index < this.proxyIPs.size()) || captcha);
+		}while((status != 200 || captcha) && this.index < this.proxyIPs.size());
 		
 		// Return the response, or null if the resource access was unsuccessful
 		return result;
