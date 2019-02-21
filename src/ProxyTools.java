@@ -1,6 +1,10 @@
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
@@ -67,6 +71,9 @@ public class ProxyTools {
 				
 				
 				
+			}catch(HttpStatusException e1) {
+				JOptionPane.showMessageDialog(new JFrame("Error"), "404 Error. You could not connect to the website. Program exiting.");
+				System.exit(1);
 			}catch (Exception e) {
 				this.index++;
 				status = 0;

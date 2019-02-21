@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +48,6 @@ public class Main {
 		JScrollPane fullScreen = new JScrollPane(screen);
 		
 		// Adjust properties of components
-		panel.setBackground(Color.GRAY);
 		fullScreen.setPreferredSize(new Dimension(450,450));
 		compNameT.setPreferredSize(new Dimension(300,25));
 		compWebsiteT.setPreferredSize(new Dimension(300,25));
@@ -62,8 +60,11 @@ public class Main {
             	// Get the input variables and clear the screen
             	String name = compNameT.getText(), website = compWebsiteT.getText();
             	
+            	
 				// Create the file for the program to write the results and this action needs to be in a try block due to the IOException
 				try {
+					
+					// Create the file and the text for the screen
 					BufferedWriter file = new BufferedWriter(new FileWriter("Open Source Intelligence Gathering on " + name + ".docx"));
 					StringBuilder screenText = new StringBuilder();
 					
@@ -115,10 +116,10 @@ public class Main {
 	            	compWebsiteT.setText("");
 	            	file.close();
 	            	
-				} catch (IOException e2) {
+				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(new JFrame("Error"), "A crucial error has occured. Program exiting");
 					System.exit(1);
-				}
+				} 
             }
         });
 		

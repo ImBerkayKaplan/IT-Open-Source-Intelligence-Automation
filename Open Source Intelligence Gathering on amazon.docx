@@ -2,15 +2,15 @@ Information detected on Edgar. Go to https://www.sec.gov/cgi-bin/browse-edgar?co
 
 Breach detected on Privacy Rights. Go to https://www.privacyrights.org/data-breaches?title=amazon
 
-FQDN: amazon.com
+FQDN: amaozon.com
 Host Name: 
-Domain Name: amazon.com
+Domain Name: amaozon.com
 Registry: com
 TLD: com
-IP numbers: 176.32.98.166 176.32.103.205 205.251.242.103
-Name servers: pdns1.ultradns.net ns1.p31.dynect.net ns2.p31.dynect.net ns3.p31.dynect.net ns4.p31.dynect.net pdns6.ultradns.co.uk
-Mail servers: amazon-smtp.amazon.com
+IP numbers: 72.52.10.14
+Name servers: ns1.markmonitor.com ns2.markmonitor.com ns3.markmonitor.com ns4.markmonitor.com ns5.markmonitor.com ns6.markmonitor.com ns7.markmonitor.com
+null
 
-IP Location: - Washington - Seattle - Akamai Technologies Inc.
-ASN: AS16625 AKAMAI-AS - Akamai Technologies, Inc., US (registered May 30, 2000)
-Server Type: Server
+IP Location: - District Of Columbia - Washington - Akamai Technologies Inc.
+ASN: AS32787 PROLEXIC-TECHNOLOGIES-DDOS-MITIGATION-NETWORK - Akamai Technologies, Inc., US (registered Jul 23, 2004)
+null
