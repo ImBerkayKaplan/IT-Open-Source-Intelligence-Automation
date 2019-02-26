@@ -42,7 +42,7 @@ public class Main {
 		JPanel panel = new JPanel();
 		JTextField compNameT = new JTextField(), compWebsiteT = new JTextField();
 		JTextArea screen = new JTextArea();
-		JLabel compNameL = new JLabel("Enter company name: "),compWebsiteL = new JLabel("Enter company website: ");
+		JLabel compNameL = new JLabel("Enter company name: "),compWebsiteL = new JLabel("Enter company website: "), warning = new JLabel("Please allow 30 seconds");
 		JButton submit = new JButton("Submit");
 		screen.setEditable(true);
 		JScrollPane fullScreen = new JScrollPane(screen);
@@ -131,6 +131,7 @@ public class Main {
 		panel.add(compWebsiteT);
 		panel.add(submit);
 		panel.add(fullScreen);
+		panel.add(warning);
 		
 		// Finish the frame
 		frame.setVisible(true);

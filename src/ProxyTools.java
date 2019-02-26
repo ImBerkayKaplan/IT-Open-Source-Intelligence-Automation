@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -49,6 +50,7 @@ public class ProxyTools {
 		
 		// Initialize the status code and the response
 		int status = 0;
+		int readTimeoutProtection = 0;
 		Document result = null;
 		Response res = null;
 		boolean captcha = true;
@@ -74,13 +76,17 @@ public class ProxyTools {
 			}catch(HttpStatusException e1) {
 				JOptionPane.showMessageDialog(new JFrame("Error"), "404 Error. You could not connect to the website. Program exiting.");
 				System.exit(1);
-			}catch (Exception e) {
+			}catch(SocketTimeoutException e2) {
+				readTimeoutProtection++;
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 				this.index++;
 				status = 0;
 			}
 			
 			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
-		}while((status != 200 || captcha) && this.index < this.proxyIPs.size());
+		}while((status != 200 || captcha) && this.index < this.proxyIPs.size() && readTimeoutProtection != 5);
 		
 		// Return the response, or null if the resource access was unsuccessful
 		return result;
