@@ -65,7 +65,7 @@ public class Main {
 				try {
 					
 					// Create the file and the text for the screen
-					BufferedWriter file = new BufferedWriter(new FileWriter("Open Source Intelligence Gathering on " + name + ".docx"));
+					BufferedWriter file = new BufferedWriter(new FileWriter("Open Source Intelligence Gathering on " + name + ".rtf"));
 					file.write("Risk Assessment on " + name + "\n\n1 a) - Google Finance:\n1 b) - Hoovers:\n1 c) - Edgar:\n");
 					StringBuilder screenText = new StringBuilder();
 					
