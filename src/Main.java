@@ -66,6 +66,7 @@ public class Main {
 					
 					// Create the file and the text for the screen
 					BufferedWriter file = new BufferedWriter(new FileWriter("Open Source Intelligence Gathering on " + name + ".docx"));
+					file.write("Risk Assessment on " + name + "\n\n1 a) - Google Finance:\n1 b) - Hoovers:\n1 c) - Edgar:\n");
 					StringBuilder screenText = new StringBuilder();
 					
 					// Edgar step
@@ -74,20 +75,15 @@ public class Main {
 	            	file.write(edgar + "\n\n");
 	            	
 	            	// Privacy Rights step
+	            	file.write("2 - Privacy Rights ClearingHouse Breach History:\n");
 	            	String privacyRights = OSU.getPrivacyRights(name);
 	            	screenText.append(privacyRights + "\n\n");
 	            	file.write(privacyRights + "\n\n");
 	            	
-	            	// Robtex step
-	            	String robtext[] = OSU.getRobtex(website);
-	            	for(int i = 0; i < robtext.length; i++) {
-	            		screenText.append(robtext[i] + "\n");
-	            		file.write(robtext[i] + "\n");
-	            	}
 	            	
-	            	// Whois step
-	            	screenText.append("\n");
-	            	file.write("\n");
+	            	
+	            	// Whois.domaintools.com step
+	            	file.write("3 - Whois Domain Tools for IP address, physical location, and ASN: \n");
 	            	try {
 						String whois[] = OSU.getWhois(website);
 		            	for(int i = 0; i < whois.length; i++) {
@@ -99,7 +95,17 @@ public class Main {
 						e1.printStackTrace();
 					}
 	            	
+	            	// Robtex step
+	            	screenText.append("\n");
+	            	file.write("\n4 - Robtex.com: \n");
+	            	String robtext[] = OSU.getRobtex(website);
+	            	for(int i = 0; i < robtext.length; i++) {
+	            		screenText.append(robtext[i] + "\n");
+	            		file.write(robtext[i] + "\n");
+	            	}
+	            	
 	            	// Set the screen
+	            	file.write("\n5 - Hurricane Electric https://bgp.he.net/AS####\n\n6 - Query their DNS servers with www.ultratools.com/tools/zoneFileDump (If zone transfer fails, that is secure):\n\n7 - Validate that their SSL/TLS configuration is secure (It should only support TLS 1.1, 1.2)\n\n8 - Check shodan with www.shodan.io\n\n9 - If they have a mobile application, downlaod and analyze their mobile application");
 	            	screen.setText(screenText.toString());
 	            	
 	            	// The SSLlabs step

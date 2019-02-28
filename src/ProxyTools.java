@@ -49,8 +49,7 @@ public class ProxyTools {
 	Document proxyStream(String resource ,String website) throws IOException{
 		
 		// Initialize the status code and the response
-		int status = 0;
-		int readTimeoutProtection = 0;
+		int status = 0, socketTimeoutException = 0;
 		Document result = null;
 		Response res = null;
 		boolean captcha = true;
@@ -70,23 +69,20 @@ public class ProxyTools {
 					res = null;
 					captcha=result.getElementsByClass("row-label").isEmpty();
 				}
-				
-				
-				
+			}catch(SocketTimeoutException e2) {
+				socketTimeoutException++;
+				this.index++;
 			}catch(HttpStatusException e1) {
 				JOptionPane.showMessageDialog(new JFrame("Error"), "404 Error. You could not connect to the website. Program exiting.");
 				System.exit(1);
-			}catch(SocketTimeoutException e2) {
-				readTimeoutProtection++;
-			}
-			catch (Exception e) {
+			}catch (Exception e) {
 				e.printStackTrace();
 				this.index++;
 				status = 0;
 			}
 			
 			// Keep iterating while the status code is not success or the index did not exceed the size or whois did showed captcha
-		}while((status != 200 || captcha) && this.index < this.proxyIPs.size() && readTimeoutProtection != 5);
+		}while((status != 200 || captcha) && this.index < this.proxyIPs.size() && socketTimeoutException < 10);
 		
 		// Return the response, or null if the resource access was unsuccessful
 		return result;

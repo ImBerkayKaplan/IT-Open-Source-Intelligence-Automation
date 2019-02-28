@@ -122,6 +122,13 @@ public class OSUIntelligenceTools {
 				result[i] = ERROR_MESSAGE;
 			}
 		}
+		
+		// Just a customized error message whe an intended information was not found on whois.domaintools.com
+		for(int j = 0; j < result.length; j++) {
+			if(result[j].equals(null)) {
+				result[j] = "This information was not found on robtex.com";
+			}
+		}
 				
 		// Return the Privacy Rights breaches
 		return result;
@@ -160,6 +167,13 @@ public class OSUIntelligenceTools {
 			// Set all elements the error message
 			for(int i = 0; i < NUMBER_OF_WHOISELEMENTS; i++) {
 				result[i] = ERROR_MESSAGE;
+			}
+		}
+		
+		// Just a customized error message whe an intended information was not found on whois.domaintools.com
+		for(int j = 0; j < result.length; j++) {
+			if(result[j].equals(null)) {
+				result[j] = "This information was not found on whois.domaintools.com";
 			}
 		}
 		
