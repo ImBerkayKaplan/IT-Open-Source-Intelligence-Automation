@@ -21,9 +21,9 @@ This tutorial assumes that you have the Java Development Kit (JDK) installed on 
 
 Organize your Java files: Ensure that your Java files (e.g., Main.java and OSUIntelligenceTools.java) are located in the same directory.
 
-Download the Jsoup library JAR file from the official Jsoup website, https://jsoup.org/download. Select the "jsoup-x.x.x.jar" file (where x.x.x is the version number).
+Download the Jsoup library JAR file from the official Jsoup website, https://jsoup.org/download. Select the "jsoup-x.x.x.jar" file (where x.x.x is the version number). This repo also has a jsoup library in its lib folder, but it may be outdated.
 
-Save the downloaded JAR file in the same directory as your Java files (e.g., Main.java and OSUIntelligenceTools.java).
+Save the downloaded JAR file for Jsoup in the same directory as your Java files (e.g., Main.java and OSUIntelligenceTools.java).
 
 Open a terminal (Command Prompt on Windows, Terminal on macOS or Linux) and navigate to the directory containing the Java files using the cd command. For example:
 
