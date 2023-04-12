@@ -80,24 +80,9 @@ public class Main {
 	            	screenText.append(privacyRights + "\n\n");
 	            	file.write(privacyRights + "\n\n");
 	            	
-	            	
-	            	
-	            	// Whois.domaintools.com step
-	            	file.write("3 - Whois Domain Tools for IP address, physical location, and ASN: \n");
-	            	try {
-						String whois[] = OSU.getWhois(website);
-		            	for(int i = 0; i < whois.length; i++) {
-		            		screenText.append(whois[i] + "\n");
-		            		file.write(whois[i] + "\n");
-		            	}
-		            	
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-	            	
 	            	// Robtex step
 	            	screenText.append("\n");
-	            	file.write("\n4 - Robtex.com: \n");
+	            	file.write("\n3 - Robtex.com: \n");
 	            	String robtext[] = OSU.getRobtex(website);
 	            	for(int i = 0; i < robtext.length; i++) {
 	            		screenText.append(robtext[i] + "\n");
@@ -105,7 +90,7 @@ public class Main {
 	            	}
 	            	
 	            	// Set the screen
-	            	file.write("\n5 - Hurricane Electric https://bgp.he.net/AS####\n\n6 - Query their DNS servers with www.ultratools.com/tools/zoneFileDump (If zone transfer fails, that is secure):\n\n7 - Validate that their SSL/TLS configuration is secure (It should only support TLS 1.1, 1.2)\n\n8 - Check shodan with www.shodan.io\n\n9 - If they have a mobile application, downlaod and analyze their mobile application");
+	            	file.write("\n4 - Hurricane Electric https://bgp.he.net/AS####\n\n5 - Query their DNS servers with www.ultratools.com/tools/zoneFileDump (If zone transfer fails, that is secure):\n\n6 - Validate that their SSL/TLS configuration is secure (It should only support TLS 1.1, 1.2)\n\n7 - Check shodan with www.shodan.io\n\n8 - If they have a mobile application, downlaod and analyze their mobile application");
 	            	screen.setText(screenText.toString());
 	            	
 	            	// The SSLlabs step
