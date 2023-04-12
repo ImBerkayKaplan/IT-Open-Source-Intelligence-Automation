@@ -135,52 +135,6 @@ public class OSUIntelligenceTools {
 		
 	}
 	
-	/* This method checks the information on http://whois.domaintools.com/
-	 * 
-	 * @params websiteName
-	 * 		The website name in question
-	 * 
-	 * @returns The information found on whois as String array
-	 */
-	String[] getWhois(String website) throws IOException{
-		
-		// Define the result array, the proxy tools to circumvent whois.com's limit usage, and get the website as a response
-		String[] result = new String[NUMBER_OF_WHOISELEMENTS];
-		ProxyTools proxy = new ProxyTools();
-		Document whoisResponse = proxy.proxyStream("http://whois.domaintools.com/" , website);
-		Elements rows = new Elements();
-		
-		// If the response is null, then all the proxies have reached their whois.com usage limit. You may wait for a while, or use other proxies
-		if(whoisResponse != null) {
-			rows = whoisResponse.getElementsByClass("row-label");
-			
-			// Add the IP Location, Server Type, and ASN to the result by iterating through all rows to find those specific elements
-			int counter1 = 0;
-			for(int i = 0; i < rows.size(); i++) {
-				if(rows.get(i).text().equals("IP Location") || rows.get(i).text().equals("Server Type") || rows.get(i).text().equals("ASN")) {
-					result[counter1++] = rows.get(i).text() + ": " +rows.get(i).parent().child(1).text();
-				}
-			}
-			
-		}else {
-			
-			// Set all elements the error message
-			for(int i = 0; i < NUMBER_OF_WHOISELEMENTS; i++) {
-				result[i] = ERROR_MESSAGE;
-			}
-		}
-		
-		// Just a customized error message whe an intended information was not found on whois.domaintools.com
-		for(int j = 0; j < result.length; j++) {
-			if(result[j].equals(null)) {
-				result[j] = "This information was not found on whois.domaintools.com";
-			}
-		}
-		
-		// Return the whois.domaintools.com information about the company
-		return result;
-	}
-	
 	/* This method opens a new web browser to the www.ssllabs.com
 	 * 
 	 * @params websiteName
