@@ -1,4 +1,28 @@
 # IT-Open-Source-Intelligence-Automation
 A project to automate the open source intelligence gathering step in risk assessment of third party vendors. The GUI of the project requests the company name and website to assess the security level of their digital infrastructure and any incidents related to IT. It generates an incomplete report from various websites using webscraping techniques. 
 
-One notable thing about this project is the use of proxies to utilize a www.whois.com service that is limited to 10 use per IP. This technique can be applied to other fields to circumvent a service use limit. However, you may be violating a vendors terms and services agreement.
+## Running The Project Linux
+
+This tutorial assumes that you have the Java Development Kit (JDK) installed on your system. If you don't, you can download it from the official Oracle website. I'm running this project from my Linux VirtualBox.
+
+Organize your Java files: Ensure that your Java files (e.g., Main.java, OSUIntelligenceTools.java, and ProxyTools.java) are located in the same directory.
+
+Download the Jsoup library JAR file from the official Jsoup website, https://jsoup.org/download. Select the "jsoup-x.x.x.jar" file (where x.x.x is the version number).
+
+Save the downloaded JAR file in the same directory as your Java files (e.g., Main.java, OSUIntelligenceTools.java, and ProxyTools.java).
+
+Open a terminal (Command Prompt on Windows, Terminal on macOS or Linux) and navigate to the directory containing the Java files using the cd command. For example:
+
+```cd /IT-Open-Source-Intelligence-Automation/src```
+
+Compile the Java files using the javac command and replace the x with version number:
+
+```javac -cp .:jsoup-x.x.x.jar Main.java OSUIntelligenceTools.java ProxyTools.java```
+
+This command will compile your Java files and generate corresponding .class files.
+
+Run the compiled Main.class file using the java command and replace the x with version number:
+
+```java -cp .:jsoup-x.x.x.jar Main```
+
+This command will execute the Main class, and you should see the GUI on your screen.
