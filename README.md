@@ -19,13 +19,11 @@ There are three output elements after you input the company name and its web dom
 
 This tutorial assumes that you have the Java Development Kit (JDK) installed on your system. If you don't, you can download it from the official Oracle website. I'm running this project from my Linux VirtualBox.
 
-Organize your Java files: Ensure that your Java files (e.g., Main.java and OSUIntelligenceTools.java) are located in the same directory.
-
 Download the Jsoup library JAR file from the official Jsoup website, https://jsoup.org/download. Select the "jsoup-x.x.x.jar" file (where x.x.x is the version number). This repo also has a jsoup library in its lib folder, but it may be outdated.
 
 Save the downloaded JAR file for Jsoup in the same directory as your Java files (e.g., Main.java and OSUIntelligenceTools.java).
 
-Open a terminal (Command Prompt on Windows, Terminal on macOS or Linux) and navigate to the directory containing the Java files using the cd command. For example:
+Open a terminal and navigate to the directory containing the Java files using the cd command:
 
 ```cd /IT-Open-Source-Intelligence-Automation/src```
 
@@ -33,9 +31,9 @@ Compile the Java files using the javac command and replace the x with version nu
 
 ```javac -cp .:jsoup-x.x.x.jar Main.java OSUIntelligenceTools.java```
 
-This command will compile your Java files and generate corresponding .class files.
+This command will compile your Java files and generate corresponding ```.class``` files.
 
-Run the compiled Main.class file using the java command and replace the x with version number:
+Run the compiled ```Main.class``` file using the java command and replace the x with version number:
 
 ```java -cp .:jsoup-x.x.x.jar Main```
 
